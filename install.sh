@@ -8,7 +8,7 @@ ARCH=$(uname -m)
 WHO=$(whoami)
 DEBUG=0
 FORCE=0
-VERSION="3.12.36"
+VERSION="3.12.39"
 
 DOCKER_MAJOR=20
 DOCKER_MINOR=10
@@ -67,7 +67,7 @@ doNotTrack() {
 restartCoolify() {
     if [ -f "$COOLIFY_CONF_FOUND" ]; then
         echo "Restarting Coolify."
-        cd ~/coolify && sudo docker run --rm -tid --env-file $COOLIFY_CONF_FOUND -v /var/run/docker.sock:/var/run/docker.sock -v coolify-db-sqlite ghcr.io/tiero/coolify-v3:${VERSION:-latest} /bin/sh -c "env | grep COOLIFY > .env && docker compose up -d --force-recreate" >/dev/null
+        cd ~/coolify && sudo docker run --rm -tid --env-file $COOLIFY_CONF_FOUND -v /var/run/docker.sock:/var/run/docker.sock -v coolify-db-sqlite ghcr.io/tiero/coolify:${VERSION:-latest} /bin/sh -c "env | grep COOLIFY > .env && docker compose up -d --force-recreate" >/dev/null
         exit 0
     else
         echo "Coolify never installed on this server. Cannot restart."
@@ -350,9 +350,9 @@ echo "Pulling Coolify latest image (${VERSION}) from ghcr.io."
 TAGVERSION=${VERSION}
 LATESTVERSION="latest"
 
-IMAGE=ghcr.io/tiero/coolify-v3:${TAGVERSION}
+IMAGE=ghcr.io/tiero/coolify:${TAGVERSION}
 if ! docker pull -q $IMAGE >/dev/null 2>&1; then
-    IMAGE=ghcr.io/tiero/coolify-v3:${LATESTVERSION}
+    IMAGE=ghcr.io/tiero/coolify:${LATESTVERSION}
     if ! docker pull -q $IMAGE >/dev/null 2>&1; then
         IMAGE=tiero/coolify-v3:${TAGVERSION}
         if ! docker pull -q $IMAGE >/dev/null 2>&1; then
