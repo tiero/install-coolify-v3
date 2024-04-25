@@ -8,7 +8,7 @@ ARCH=$(uname -m)
 WHO=$(whoami)
 DEBUG=0
 FORCE=0
-VERSION="3.12.39"
+VERSION="3.12.36"
 
 DOCKER_MAJOR=20
 DOCKER_MINOR=10
@@ -67,7 +67,7 @@ doNotTrack() {
 restartCoolify() {
     if [ -f "$COOLIFY_CONF_FOUND" ]; then
         echo "Restarting Coolify."
-        cd ~/coolify && sudo docker run --rm -tid --env-file $COOLIFY_CONF_FOUND -v /var/run/docker.sock:/var/run/docker.sock -v coolify-db-sqlite ghcr.io/coollabsio/coolify:${VERSION:-latest} /bin/sh -c "env | grep COOLIFY > .env && docker compose up -d --force-recreate" >/dev/null
+        cd ~/coolify && sudo docker run --rm -tid --env-file $COOLIFY_CONF_FOUND -v /var/run/docker.sock:/var/run/docker.sock -v coolify-db-sqlite ghcr.io/tiero/coolify-v3:${VERSION:-latest} /bin/sh -c "env | grep COOLIFY > .env && docker compose up -d --force-recreate" >/dev/null
         exit 0
     else
         echo "Coolify never installed on this server. Cannot restart."
@@ -84,7 +84,7 @@ while getopts hvdfrnawi:x:-: OPT; do
     case "$OPT" in
     h | help)
         echo -e "Coolify installer $VERSION
-(source code: https://github.com/coollabsio/get.coollabs.io/blob/main/static/coolify/install.sh)\n
+(source code: https://github.com/tiero/install-coolify-v3/blob/install.sh)\n
 Usage: install.sh [options...] 
     -h, --help                  Show this help menu.
     -v, --version               Show script version.
@@ -146,7 +146,7 @@ if [ $FORCE -eq 1 ]; then
 else
     echo -e "Welcome to Coolify installer!"
     echo -e "This script will install all requirements to run Coolify."
-    echo -e "(Source code of this script: https://github.com/coollabsio/get.coollabs.io/blob/main/static/coolify/install.sh)\n"
+    echo -e "(Source code of this script: https://github.com/tiero/install-coolify-v3/blob/install.sh)\n"
     echo "-------------"
     echo -e "TELEMETRY:"
     echo -e "1. The script generates a random UUID for your installation to show the number of installed instances on the landing page (https://coolify.io). Nothing else."
@@ -350,13 +350,13 @@ echo "Pulling Coolify latest image (${VERSION}) from ghcr.io."
 TAGVERSION=${VERSION}
 LATESTVERSION="latest"
 
-IMAGE=ghcr.io/coollabsio/coolify:${TAGVERSION}
+IMAGE=ghcr.io/tiero/coolify-v3:${TAGVERSION}
 if ! docker pull -q $IMAGE >/dev/null 2>&1; then
-    IMAGE=ghcr.io/coollabsio/coolify:${LATESTVERSION}
+    IMAGE=ghcr.io/tiero/coolify-v3:${LATESTVERSION}
     if ! docker pull -q $IMAGE >/dev/null 2>&1; then
-        IMAGE=coollabsio/coolify:${TAGVERSION}
+        IMAGE=tiero/coolify-v3:${TAGVERSION}
         if ! docker pull -q $IMAGE >/dev/null 2>&1; then
-            IMAGE=coollabsio/coolify:${LATESTVERSION}
+            IMAGE=tiero/coolify-v3:${LATESTVERSION}
             if ! docker pull -q $IMAGE >/dev/null 2>&1; then
                 echo "Cannot find any Coolify image. Please check your internet connection. Exiting."
                 exit 1
