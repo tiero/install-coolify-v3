@@ -8,7 +8,7 @@ ARCH=$(uname -m)
 WHO=$(whoami)
 DEBUG=0
 FORCE=0
-VERSION=$(curl --silent https://get.coollabs.io/versions.json | grep -i version | xargs | awk '{print $2}' | tr -d ',')
+VERSION="3.12.39"
 
 DOCKER_MAJOR=20
 DOCKER_MINOR=10
